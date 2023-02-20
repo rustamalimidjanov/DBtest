@@ -8,6 +8,8 @@ import androidx.fragment.app.Fragment
 import com.example.testest.databinding.FragmentMainBinding
 import java.util.*
 
+
+
 private const val ARG_MONTH_ID = "month_id"
 
 class FragmentMain: Fragment(){
@@ -29,12 +31,24 @@ class FragmentMain: Fragment(){
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        updateUI()
+
+    }
+
+    fun updateUI() {
         binding.button.setOnClickListener{
             val edText = binding.editText.text.toString()
             val nameId: UUID = UUID.randomUUID()
             val name = Name(nameId, edText)
             nameRepository.addName(name = name)
-            binding.textView.text = name.name
+            binding.textView.text = ""
+
+            nameRepository.getNames().observe (viewLifecycleOwner){ list ->
+                list.forEach { name ->
+                    val text = "ID = ${name.id}, TEXT= ${name.name} \n"
+                    binding.textView.append(text)
+                }
+            }
         }
     }
 

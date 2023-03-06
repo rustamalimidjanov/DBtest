@@ -17,6 +17,7 @@ import java.util.*
 
 class FragmentMain: Fragment(){
     private lateinit var binding: FragmentMainBinding
+    private lateinit var name: Name
     private val nameViewModel: FragmentViewModel by activityViewModels()
 
     override fun onCreateView(
@@ -24,12 +25,15 @@ class FragmentMain: Fragment(){
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        name = Name()
         binding = FragmentMainBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.textView.text = ""
+        nameViewModel.saveEditState(state = binding.editText.text.toString())
 
         nameViewModel.getNamesLiveData.observe(
             viewLifecycleOwner,
@@ -47,12 +51,10 @@ class FragmentMain: Fragment(){
 
     private fun updateUI() {
         binding.button.setOnClickListener{
-
             val edText = binding.editText.text.toString()
             val nameId: UUID = UUID.randomUUID()
-            val name = Name(nameId, edText)
+            val name = Name(id = nameId, name = edText)
             nameViewModel.addName(name = name)
-            binding.textView.text = ""
         }
     }
 }

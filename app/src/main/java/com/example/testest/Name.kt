@@ -6,6 +6,6 @@ import java.util.UUID
 
 @Entity
 data class Name(
-    @PrimaryKey val id: UUID = UUID.randomUUID(),
-    var name: String,
+    @PrimaryKey var id: UUID = UUID.randomUUID(),
+    var name: String = "",
 )
